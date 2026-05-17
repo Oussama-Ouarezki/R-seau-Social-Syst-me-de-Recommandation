@@ -31,7 +31,7 @@ Le réseau Karate Club de Zachary est un jeu de données classique en analyse de
 *Comparaison des quatre mesures de centralité (degré, betweenness, closeness, eigenvector) pour les nœuds les plus influents.*
 
 ▶️ [Video explicative dans youtube](https://youtu.be/ZE2fBwU4ajM)  
-📄 [Rapport Complet](https://github.com/Oussama-Ouarezki/R-seau-Social-Syst-me-de-Recommandation/blob/main/ARS%201/Report.pdf)
+📄 [Rapport Complet](https://github.com/Oussama-Ouarezki/R-seau-Social-Syst-me-de-Recommandation/raw/main/ARS%201/Report.pdf)
 
 ---
 
@@ -119,4 +119,4 @@ Deux algorithmes distincts implémentés :
    python manage.py runserver
    ```
 
-📄 [Documentation complète (PDF)](https://github.com/Oussama-Ouarezki/R-seau-Social-Syst-me-de-Recommandation/blob/main/RAPPORT-DE-PROJET-_-R%C3%89SEAU-SOCIAL-SYST%C3%88MES-DE-RECOMMANDATION.pdf.pdf)
+📄 [Documentation complète (PDF)](https://github.com/Oussama-Ouarezki/R-seau-Social-Syst-me-de-Recommandation/raw/main/RAPPORT-DE-PROJET-_-R%C3%89SEAU-SOCIAL-SYST%C3%88MES-DE-RECOMMANDATION.pdf.pdf)
