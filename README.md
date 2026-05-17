@@ -58,4 +58,6 @@ Deux algorithmes distincts implémentés :
     ```bash
     python manage.py runserver
     ```
-
+https://github.com/Oussama-Ouarezki/R-seau-Social-Syst-me-de-Recommandation/blob/main/RAPPORT-DE-PROJET-_-R%C3%89SEAU-SOCIAL-SYST%C3%88MES-DE-RECOMMANDATION.pdf.pdf
+[Full Documentation]([lien_vers_votre_rapport.pdf](https://github.com/Oussama-Ouarezki/R-seau-Social-Syst-me-de-Recommandation/blob/main/RAPPORT-DE-PROJET-_-R%C3%89SEAU-SOCIAL-SYST%C3%88MES-DE-RECOMMANDATION.pdf.pdf
+))
