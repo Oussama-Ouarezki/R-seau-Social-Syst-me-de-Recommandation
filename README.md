@@ -59,8 +59,3 @@ Deux algorithmes distincts implémentés :
     python manage.py runserver
     ```
 
-## 👥 Auteurs
-*   Benabdous Mohamed
-*   Chettouh Sadek El Amine
-*   Ouarezki Oussama
-*   Mechkak Youcef
