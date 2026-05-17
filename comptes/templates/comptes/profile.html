@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <!-- Profile Card -->
+    <div class="col-md-4 mb-4">
+        <div class="card text-center h-100">
+            <div class="card-body d-flex flex-column align-items-center">
+                {% if profile.photo %}
+                <img src="{{ profile.photo.url }}" class="rounded-circle profile-pic-lg mb-3">
+                {% else %}
+                <img src="{% static 'images/default_profile.png' %}" class="rounded-circle profile-pic-lg mb-3"
+                    onerror="this.src='https://via.placeholder.com/150'">
+                {% endif %}
+
+                <h3 class="card-title fw-bold mb-1">{{ profile_user.username }}</h3>
+                <p class="text-muted mb-3">{{ profile_user.email }}</p>
+
+                {% if profile.bio %}
+                <p class="card-text mb-4 fst-italic">"{{ profile.bio }}"</p>
+                {% else %}
+                <p class="card-text mb-4 text-muted fst-italic">Aucune biographie.</p>
+                {% endif %}
+
+                <div class="mb-4 w-100">
+                    <h6 class="text-uppercase text-muted small fw-bold mb-2">Statistiques</h6>
+                    <div class="d-flex justify-content-around">
+                        <div>
+                            <span class="h5 fw-bold d-block">{{ profile.user.posts.count }}</span>
+                            <small class="text-muted">Posts</small>
+                        </div>
+                        <div>
+                            <span class="h5 fw-bold d-block">{{ friends_count }}</span>
+                            <small class="text-muted">Amis</small>
+                        </div>
+                        {% if user != profile_user %}
+                        <div>
+                            <span class="h5 fw-bold d-block">{{ common_friends_count }}</span>
+                            <small class="text-muted">Communs</small>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="mt-auto w-100">
+                    {% if user == profile_user %}
+                    <a href="{% url 'comptes:profile_edit' %}" class="btn btn-outline-primary w-100 mb-2">
+                        <i class="fas fa-edit me-1"></i> Modifier le profil
+                    </a>
+                    {% else %}
+                    {% if is_friend %}
+                    <button class="btn btn-success w-100 mb-2" disabled>
+                        <i class="fas fa-check me-1"></i> Amis
+                    </button>
+                    <a href="{% url 'amis:remove_friend' profile_user.username %}"
+                        class="btn btn-outline-danger btn-sm w-100" onclick="return confirm('Êtes-vous sûr ?')">
+                        Retirer des amis
+                    </a>
+                    {% elif pending_request %}
+                    <button class="btn btn-secondary w-100 mb-2" disabled>
+                        <i class="fas fa-clock me-1"></i> Demande envoyée
+                    </button>
+                    {% else %}
+                    <a href="{% url 'amis:send_request' profile_user.username %}" class="btn btn-primary w-100 mb-2">
+                        <i class="fas fa-user-plus me-1"></i> Ajouter en ami
+                    </a>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Details Column -->
+    <div class="col-md-8">
+        <!-- Interests -->
+        <div class="card mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0 fw-bold"><i class="fas fa-tags me-2 text-primary"></i>Centres d'intérêt</h5>
+            </div>
+            <div class="card-body">
+                {% if profile.interests.all %}
+                <div class="d-flex flex-wrap gap-2">
+                    {% for interest in profile.interests.all %}
+                    <span class="badge-interest">{{ interest.name }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted mb-0">Aucun centre d'intérêt renseigné.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Recent Posts -->
+        <div class="card">
+            <div class="card-header bg-white">
+                <h5 class="mb-0 fw-bold"><i class="fas fa-newspaper me-2 text-primary"></i>Publications récentes</h5>
+            </div>
+            <div class="card-body p-0">
+                {% if profile_user.posts.all %}
+                <div class="list-group list-group-flush">
+                    {% for post in profile_user.posts.all|slice:":5" %}
+                    <a href="{% url 'publications:post_detail' post.pk %}"
+                        class="list-group-item list-group-item-action p-3">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1 text-truncate" style="max-width: 70%;">{{ post.content }}</h6>
+                            <small class="text-muted">{{ post.created_at|date:"d M Y" }}</small>
+                        </div>
+                        <small class="text-muted">
+                            <i class="fas fa-heart me-1"></i> {{ post.get_likes_count }}
+                            <i class="fas fa-comment ms-2 me-1"></i> {{ post.get_comments_count }}
+                        </small>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="p-3 text-center text-muted">Aucu post publié pour le moment.</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

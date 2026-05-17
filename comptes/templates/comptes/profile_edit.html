@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-white py-3">
+                <h4 class="mb-0 fw-bold">Modifier le profil</h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <h5 class="text-primary mb-3">Informations personnelles</h5>
+                    <div class="mb-3">
+                        <label class="form-label">Nom d'utilisateur</label>
+                        {{ u_form.username }}
+                        <div class="text-danger small">{{ u_form.username.errors }}</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        {{ u_form.email }}
+                        <div class="text-danger small">{{ u_form.email.errors }}</div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h5 class="text-primary mb-3">Détails du profil</h5>
+                    <div class="mb-3">
+                        <label class="form-label">Photo de profil</label>
+                        {{ p_form.photo }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Biographie</label>
+                        {{ p_form.bio }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Centres d'intérêt</label>
+                        <div class="card p-3 bg-light">
+                            <div class="d-flex flex-wrap gap-3">
+                                {{ p_form.interests }}
+                            </div>
+                        </div>
+                        <div class="form-text">Sélectionnez vos centres d'intérêt pour améliorer les recommandations.
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <a href="{% url 'comptes:profile' %}" class="btn btn-outline-secondary">Annuler</a>
+                        <button class="btn btn-primary px-4" type="submit">Enregistrer les modifications</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Add bootstrap classes to form inputs manually since we're not using crispy-forms fully installed
+    document.querySelectorAll('input[type="text"], input[type="email"], textarea').forEach(input => {
+        input.classList.add('form-control');
+    });
+    document.querySelectorAll('input[type="file"]').forEach(input => {
+        input.classList.add('form-control');
+    });
+</script>
+{% endblock %}

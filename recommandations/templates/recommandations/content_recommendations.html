@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold text-primary">Contenus pour vous</h2>
+            <p class="text-muted">Basé sur vos likes et vos intérêts</p>
+        </div>
+
+        {% for item in recommendations %}
+        <div class="card shadow-sm mb-4 border-0">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    {% if item.post.author.profile.photo %}
+                    <img src="{{ item.post.author.profile.photo.url }}" class="rounded-circle me-2 profile-pic-sm">
+                    {% else %}
+                    <i class="fas fa-user-circle fa-2x text-muted me-2"></i>
+                    {% endif %}
+                    <div>
+                        <a href="{% url 'comptes:profile_detail' item.post.author.username %}"
+                            class="text-decoration-none text-dark fw-bold">
+                            {{ item.post.author.username }}
+                        </a>
+                        <div class="small text-muted">{{ item.post.created_at|timesince }}</div>
+                    </div>
+                </div>
+                <span class="badge bg-info text-white" title="Score de recommandation">
+                    Score: {{ item.score|floatformat:2 }}
+                </span>
+            </div>
+
+            <div class="card-body">
+                <p class="card-text">{{ item.post.content }}</p>
+                {% if item.post.image %}
+                <img src="{{ item.post.image.url }}" class="post-image mb-3">
+                {% endif %}
+
+                <!-- Explainability -->
+                <div class="d-flex gap-2 mb-3 overflow-auto">
+                    {% if item.interest_score > 0.1 %}
+                    <span class="badge bg-light text-primary border">
+                        <i class="fas fa-bullseye me-1"></i>Match Intérêts ({{ item.interest_score|floatformat:1 }})
+                    </span>
+                    {% endif %}
+                    {% if item.social_score > 0.1 %}
+                    <span class="badge bg-light text-success border">
+                        <i class="fas fa-users me-1"></i>Réseau ({{ item.social_score|floatformat:1 }})
+                    </span>
+                    {% endif %}
+                    {% if item.popularity_score > 0.1 %}
+                    <span class="badge bg-light text-warning text-dark border">
+                        <i class="fas fa-fire me-1"></i>Populaire ({{ item.popularity_score|floatformat:1 }})
+                    </span>
+                    {% endif %}
+                </div>
+
+                <div>
+                    {% for interest in item.post.interests.all %}
+                    <span class="badge bg-light text-secondary border mr-1">
+                        #{{ interest.name }}
+                    </span>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="card-footer bg-white pt-2">
+                <div class="d-flex justify-content-between align-items-center">
+                    <a href="{% url 'publications:like_post' item.post.pk %}" class="btn btn-sm btn-outline-danger">
+                        <i class="far fa-heart me-1"></i> J'aime ({{ item.post.get_likes_count }})
+                    </a>
+                    <a href="{% url 'publications:post_detail' item.post.pk %}" class="btn btn-sm btn-outline-primary">
+                        <i class="far fa-comment me-1"></i> Commenter ({{ item.post.get_comments_count }})
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="text-center py-5">
+            <i class="fas fa-photo-video fa-3x text-muted mb-3"></i>
+            <h4>Aucune recommandation disponible.</h4>
+            <p>Interagissez avec plus de contenus pour affiner vos suggestions !</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

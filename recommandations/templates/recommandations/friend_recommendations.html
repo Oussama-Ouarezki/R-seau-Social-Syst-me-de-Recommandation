@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold text-primary">Suggestions d'Amis</h2>
+            <p class="text-muted">Des personnes que vous pourriez connaître</p>
+            <span class="badge bg-light text-dark border p-2">Algorithme utilisé : {{ algorithm_type }}</span>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for item in recommendations %}
+            <div class="col">
+                <div class="card h-100 shadow-sm border-0 reco-card hover-shadow">
+                    <div class="card-body text-center">
+                        <div class="mb-3 position-relative d-inline-block">
+                            {% if item.user.profile.photo %}
+                            <img src="{{ item.user.profile.photo.url }}" class="rounded-circle profile-pic-lg"
+                                style="width: 100px; height: 100px;">
+                            {% else %}
+                            <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center border"
+                                style="width: 100px; height: 100px;">
+                                <i class="fas fa-user fa-3x text-muted"></i>
+                            </div>
+                            {% endif %}
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
+                                {{ item.score|floatformat:2 }}
+                            </span>
+                        </div>
+
+                        <h5 class="card-title fw-bold mb-1">
+                            <a href="{% url 'comptes:profile_detail' item.user.username %}"
+                                class="text-decoration-none text-dark">
+                                {{ item.user.username }}
+                            </a>
+                        </h5>
+                        <p class="text-muted small mb-3">{{ item.user.profile.bio|truncatechars:40 }}</p>
+
+                        <div class="bg-light p-2 rounded mb-3 text-start small">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span>Amis communs:</span>
+                                <span class="fw-bold">{{ item.common_friends_count }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Similarité intérêts:</span>
+                                <span class="fw-bold">{{ item.interest_similarity|floatformat:2 }}</span>
+                            </div>
+                        </div>
+
+                        {% if item.user.profile.interests.all %}
+                        <div class="mb-3 d-flex flex-wrap justify-content-center gap-1">
+                            {% for interest in item.user.profile.interests.all|slice:":3" %}
+                            <span class="badge bg-secondary text-light fw-normal" style="font-size:0.7em;">
+                                {{ interest.name }}
+                            </span>
+                            {% endfor %}
+
+                            {% if item.user.profile.interests.count > 3 %}
+                            <span class="badge bg-light text-muted border" style="font-size:0.7em;">
+                                +{{ item.user.profile.interests.count|add:"-3" }}
+                            </span>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+
+                        <a href="{% url 'amis:send_request' item.user.username %}"
+                            class="btn btn-primary btn-sm w-100 rounded-pill">
+                            <i class="fas fa-user-plus me-1"></i> Ajouter
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 py-5 text-center">
+                <h4>Aucune suggestion.</h4>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
